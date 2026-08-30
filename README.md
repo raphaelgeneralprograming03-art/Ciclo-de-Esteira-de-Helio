@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Corrigido - Tríade de Estabilização Cósmica</title>
+    <title>Painel Tríade - Ciclo de Esteira de Hélio</title>
     <style>
         :root {
-            --bg-color: #05050a;
-            --panel-bg: rgba(10, 10, 25, 0.85);
+            --bg-color: #010103;
+            --panel-bg: rgba(4, 4, 15, 0.94);
             --neon-blue: #00f3ff;
             --neon-green: #39ff14;
             --neon-purple: #bd00ff;
             --neon-red: #ff0055;
+            --neon-amber: #ffaa00;
             --text-main: #e0e0ff;
         }
 
@@ -33,94 +34,96 @@
         }
 
         header {
-            background: linear-gradient(180deg, rgba(0,243,255,0.1) 0%, transparent 100%);
+            background: linear-gradient(180deg, rgba(0,243,255,0.15) 0%, transparent 100%);
             border-bottom: 1px solid rgba(0, 243, 255, 0.3);
             padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            z-index: 30;
         }
 
         header h1 {
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             color: var(--neon-blue);
             text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
 
         .system-status {
-            font-size: 0.9rem;
-            color: var(--neon-green);
+            font-size: 0.85rem;
+            color: var(--neon-amber);
         }
 
         .main-container {
             display: flex;
             flex: 1;
             height: calc(100vh - 60px);
-            overflow: hidden;
+            position: relative;
         }
 
-        /* Painel Lateral de Controle */
+        /* Painel Lateral */
         .control-panel {
-            width: 320px;
+            width: 340px;
             background: var(--panel-bg);
-            border-right: 1px solid rgba(0, 243, 255, 0.2);
-            padding: 20px;
+            border-right: 1px solid rgba(0, 243, 255, 0.25);
+            padding: 15px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             overflow-y: auto;
-            backdrop-filter: blur(10px);
-            z-index: 10;
+            backdrop-filter: blur(15px);
+            z-index: 30;
         }
 
         .section-title {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: var(--neon-blue);
             border-bottom: 1px dashed rgba(0, 243, 255, 0.4);
             padding-bottom: 5px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .danger-btn {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            color: var(--text-main);
-            padding: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(0, 243, 255, 0.25);
+            color: #b0b0d0;
+            padding: 10px;
             text-align: left;
             cursor: pointer;
             border-radius: 4px;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             font-family: inherit;
+            font-size: 0.75rem;
         }
 
         .danger-btn:hover {
-            background: rgba(0, 243, 255, 0.1);
+            background: rgba(0, 243, 255, 0.08);
             border-color: var(--neon-blue);
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
         }
 
         .danger-btn.active {
             background: rgba(189, 0, 255, 0.15);
             border-color: var(--neon-purple);
-            box-shadow: 0 0 15px rgba(189, 0, 255, 0.4);
+            box-shadow: 0 0 12px rgba(189, 0, 255, 0.4);
             color: #fff;
+            font-weight: bold;
         }
 
-        /* Painel de Telemetria */
         .telemetry-box {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.6);
             border: 1px solid rgba(0, 243, 255, 0.15);
             padding: 12px;
             border-radius: 4px;
-            font-size: 0.8rem;
-            line-height: 1.4;
+            font-size: 0.72rem;
+            line-height: 1.5;
         }
 
         .telemetry-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .telemetry-value {
@@ -128,11 +131,12 @@
             font-weight: bold;
         }
 
-        /* Área Central do Canvas */
+        /* Área do Espaço */
         .simulation-area {
             flex: 1;
             position: relative;
-            background: radial-gradient(circle at center, #0c0c1e 0%, #020205 100%);
+            background: #010105;
+            height: 100%;
         }
 
         canvas {
@@ -142,62 +146,63 @@
             width: 100%;
             height: 100%;
             display: block;
+            z-index: 10;
         }
 
-        /* HUD Sobreposto ao Canvas */
+        /* HUD Sobreposto */
         .hud-overlay {
             position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            background: rgba(5, 5, 10, 0.85);
-            border: 1px solid rgba(189, 0, 255, 0.3);
-            padding: 15px;
-            border-radius: 6px;
+            bottom: 15px;
+            left: 15px;
+            right: 15px;
+            background: rgba(3, 3, 10, 0.94);
+            border: 1px solid rgba(189, 0, 255, 0.35);
+            padding: 12px;
+            border-radius: 4px;
             pointer-events: none;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
+            z-index: 30;
         }
 
         .hud-title {
             color: var(--neon-purple);
-            font-size: 1rem;
-            margin-bottom: 5px;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
             text-transform: uppercase;
         }
 
         .hud-desc {
-            font-size: 0.85rem;
-            color: #b0b0d0;
-            line-height: 1.5;
+            font-size: 0.75rem;
+            color: #b5b5d5;
+            line-height: 1.4;
         }
 
         .scale-badge {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 0, 85, 0.1);
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 0, 85, 0.15);
             border: 1px solid var(--neon-red);
             color: var(--neon-red);
-            padding: 5px 10px;
-            font-size: 0.75rem;
+            padding: 4px 8px;
+            font-size: 0.65rem;
             border-radius: 3px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 0 8px rgba(255, 0, 85, 0.3);
+            z-index: 30;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>SISTEMA DE DEFESA ANALÍTICO DA TRÍADE (S.D.A.T.)</h1>
-        <div class="system-status">SISTEMAS NAVE A/B/CENTRAL: OPERACIONAIS (99.99991% c)</div>
+        <h1>MATRIZ OPERACIONAL - ESTEIRA DE REUTILIZAÇÃO DE HÉLIO</h1>
+        <div class="system-status">CONSERVAÇÃO DE HIDROGÊNIO (H): MÁXIMA (100%)</div>
     </header>
 
     <div class="main-container">
-        <!-- Controle Lateral -->
+        <!-- Painel Lateral -->
         <div class="control-panel">
-            <div class="section-title">Selecionar Fenômeno</div>
+            <div class="section-title">Ameaças Espaciais</div>
             <button class="danger-btn active" onclick="switchDanger('supernova')">1. Supernova Cósmica</button>
             <button class="danger-btn" onclick="switchDanger('grb')">2. Surto de Raios Gama (GRB)</button>
             <button class="danger-btn" onclick="switchDanger('blackhole')">3. Buraco Negro Supermassivo</button>
@@ -205,26 +210,26 @@
             <button class="danger-btn" onclick="switchDanger('vacuum')">5. Decaimento do Vácuo Quântico</button>
             <button class="danger-btn" onclick="switchDanger('blueshift')">6. Radiação com Desvio Azul</button>
 
-            <div class="section-title" style="margin-top: 15px;">Telemetria Exótica</div>
+            <div class="section-title" style="margin-top: 5px;">Métrica de Reciclagem</div>
             <div class="telemetry-box">
-                <div class="telemetry-row"><span>Velocidade Angular:</span><span class="telemetry-value">0.9999991 c</span></div>
-                <div class="telemetry-row"><span>Fator Lorentz (γ):</span><span class="telemetry-value">745.35x</span></div>
-                <div class="telemetry-row"><span>Matéria Negativa:</span><span id="tel-neg" class="telemetry-value">4.5 x 10^22 kg/s</span></div>
-                <div class="telemetry-row"><span>Matéria Escura:</span><span id="tel-dark" class="telemetry-value">9.8 x 10^26 kg/s</span></div>
-                <div class="telemetry-row"><span>Integridade Estrutural:</span><span id="tel-integ" class="telemetry-value" style="color:var(--neon-green)">100%</span></div>
-                <div class="telemetry-row"><span>Proteção Planetária:</span><span id="tel-shield" class="telemetry-value" style="color:var(--neon-green)">ABSOLUTA</span></div>
+                <div class="telemetry-row"><span>Status da Esteira:</span><span class="telemetry-value" style="color:var(--neon-green)">RECAPTURA ATIVA</span></div>
+                <div class="telemetry-row"><span>Eficiência do He:</span><span class="telemetry-value">99.84% (Retorno)</span></div>
+                <div class="telemetry-row"><span>H Reservado:</span><span class="telemetry-value" style="color:var(--neon-green)">PRESERVADO</span></div>
+                <div class="telemetry-row"><span>Giro da Tríade:</span><span class="telemetry-value">0.9999991 c</span></div>
+                <div class="telemetry-row"><span>Fator Lorentz:</span><span class="telemetry-value">745.35x</span></div>
+                <div class="telemetry-row"><span>Matéria Negativa:</span><span id="tel-neg" class="telemetry-value">--</span></div>
+                <div class="telemetry-row"><span>Matéria Escura:</span><span id="tel-dark" class="telemetry-value">--</span></div>
             </div>
         </div>
 
-        <!-- Área de Simulação Visual -->
+        <!-- Área Espacial -->
         <div class="simulation-area">
-            <div id="scale-indicator" class="scale-badge">Magnitude: ExaJoules</div>
+            <div id="scale-indicator" class="scale-badge">Carregando Métrica...</div>
             <canvas id="simCanvas"></canvas>
             
-            <!-- HUD Explicativo Dinâmico -->
             <div class="hud-overlay">
-                <div id="hud-name" class="hud-title">Supernova Cósmica</div>
-                <div id="hud-text" class="hud-desc">Carregando dados táticos do escudo quântico...</div>
+                <div id="hud-name" class="hud-title">Carregando...</div>
+                <div id="hud-text" class="hud-desc">Iniciando traqueamento da esteira cinemática de combustível...</div>
             </div>
         </div>
     </div>
@@ -233,38 +238,34 @@
         const canvas = document.getElementById('simCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Redimensionar canvas dinamicamente
-        function resizeCanvas() {
-            canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = canvas.parentElement.clientHeight;
+        // Inicialização forçada e segura do tamanho do Canvas
+        function initCanvasSize() {
+            canvas.width = canvas.parentElement.clientWidth || 800;
+            canvas.height = canvas.parentElement.clientHeight || 600;
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        initCanvasSize();
+        window.addEventListener('resize', initCanvasSize);
 
-        // Estado Global da Simulação
         let currentDanger = 'supernova';
         let time = 0;
 
-        // Cores fixas em formato string para evitar falhas do motor CSS do Canvas
-        const colorBlue = "#00f3ff";
-        const colorPurple = "#bd00ff";
-        const colorRed = "#ff0055";
-        const colorGreen = "#39ff14";
+        // Campo de estrelas tridimensional
+        const stars = [];
+        for(let i = 0; i < 130; i++) {
+            stars.push({ x: Math.random(), y: Math.random(), size: Math.random() * 1.6 + 0.4 });
+        }
 
-        // Banco de Dados Táticos dos Perigos
+        // Dados textuais do painel
         const dangerData = {
             supernova: {
                 name: "1. Supernova Cósmica (Magnitude: ExaJoules Estelares)",
-                text: "A onda de choque e radiação da Supernova colidem contra a barreira. A Tríade injeta Matéria Escura massiva na periferia do horizonte de eventos do portal, criando um poço gravitacional invisível que deforma o espaço. A explosão é forçada a realizar uma Lente Gravitacional Total, contornando a Terra e os planetas aliados com deflexão perfeita.",
-                scale: "Magnitude: ExaJoules",
-                neg: "4.5 x 10^22 kg/s",
-                dark: "9.8 x 10^26 kg/s"
+                text: "A onda de choque colide contra o escudo. Enquanto a Tríade desvia a radiação via Lente Gravitacional de Matéria Escura, a frota realiza a rota de retorno na mesma trajetória, capturando o Hélio suspenso na esteira magnética e economizando todo o Hidrogênio estrutural.",
+                scale: "Magnitude: ExaJoules", neg: "4.5 x 10^22 kg/s", dark: "9.8 x 10^26 kg/s"
             },
             grb: {
                 name: "2. Surto de Raios Gama - GRB (Magnitude: Feixe Relativístico)",
-                text: "O feixe de energia pura colide em linha reta. A Nave A e a Nave B aceleram seu giro gerando densidade crítica de Matéria Negativa. Isso projeta uma 'colina gravitacional' de curvatura invertida (antigravidade). O feixe de fótons energéticos sofre refração espacial absoluta, espalhando a radiação fatal para o vácuo morto, blindando constelações inteiras.",
-                scale: "Magnitude: YottaWatts",
-                neg: "8.9 x 10^24 kg/s",
-                dark: "1.2 x 10^22 kg/s"
+                text: "O feixe linear de alta frequência é refratado pelos campos de Matéria Negativa gerados pelas naves A e B. Os propulsores MHD mantêm o trilho de reciclagem cinético de Hélio estável mesmo sob o estresse energético do surto gama.",
+                scale: "Magnitude: YottaWatts", neg: "8.9 x 10^24 kg/s", dark: "1.2 x 10^22 kg/s"
             },
             blackhole: {
+                name: "3. Buraco Negro Supermassivo (Magnitude: Bilhões de Massas Solares)",
