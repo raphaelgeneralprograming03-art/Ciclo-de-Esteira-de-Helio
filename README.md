@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador Avançado - Tríade de Estabilização Cósmica</title>
+    <title>Painel Corrigido - Tríade de Estabilização Cósmica</title>
     <style>
         :root {
             --bg-color: #05050a;
@@ -70,6 +70,7 @@
             gap: 15px;
             overflow-y: auto;
             backdrop-filter: blur(10px);
+            z-index: 10;
         }
 
         .section-title {
@@ -208,8 +209,8 @@
             <div class="telemetry-box">
                 <div class="telemetry-row"><span>Velocidade Angular:</span><span class="telemetry-value">0.9999991 c</span></div>
                 <div class="telemetry-row"><span>Fator Lorentz (γ):</span><span class="telemetry-value">745.35x</span></div>
-                <div class="telemetry-row"><span>Matéria Negativa:</span><span id="tel-neg" class="telemetry-value">0.00 kg/s</span></div>
-                <div class="telemetry-row"><span>Matéria Escura:</span><span id="tel-dark" class="telemetry-value">0.00 kg/s</span></div>
+                <div class="telemetry-row"><span>Matéria Negativa:</span><span id="tel-neg" class="telemetry-value">4.5 x 10^22 kg/s</span></div>
+                <div class="telemetry-row"><span>Matéria Escura:</span><span id="tel-dark" class="telemetry-value">9.8 x 10^26 kg/s</span></div>
                 <div class="telemetry-row"><span>Integridade Estrutural:</span><span id="tel-integ" class="telemetry-value" style="color:var(--neon-green)">100%</span></div>
                 <div class="telemetry-row"><span>Proteção Planetária:</span><span id="tel-shield" class="telemetry-value" style="color:var(--neon-green)">ABSOLUTA</span></div>
             </div>
@@ -244,6 +245,12 @@
         let currentDanger = 'supernova';
         let time = 0;
 
+        // Cores fixas em formato string para evitar falhas do motor CSS do Canvas
+        const colorBlue = "#00f3ff";
+        const colorPurple = "#bd00ff";
+        const colorRed = "#ff0055";
+        const colorGreen = "#39ff14";
+
         // Banco de Dados Táticos dos Perigos
         const dangerData = {
             supernova: {
@@ -261,4 +268,3 @@
                 dark: "1.2 x 10^22 kg/s"
             },
             blackhole: {
-                name: "3. Buraco Negro Supermassivo (Magnitude: Bilhões de Massas Solares)",
